@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const VIDEO_URL =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4";
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260422_191657_800d4e1f-7ab3-41af-90b6-9bd3039eb294.mp4";
 
 const navItems = ["Home", "Studio", "About", "Journal", "Reach Us"];
 const VIDEO_TOP_OFFSET_PX = 300;
@@ -64,11 +64,11 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
-      <div className="absolute z-0" style={{ inset: "auto 0 0 0", top: `${VIDEO_TOP_OFFSET_PX}px` }}>
+    <div className="relative min-h-screen w-full overflow-hidden bg-transparent text-foreground">
+      <div className="absolute inset-0 z-0">
         <video
           ref={videoRef}
-          className="h-full w-full object-cover transition-opacity duration-300"
+          className="w-full h-full object-cover transition-opacity duration-300"
           src={VIDEO_URL}
           aria-hidden="true"
           muted
@@ -76,7 +76,6 @@ export default function Home() {
           preload="auto"
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-background via-transparent to-background" />
 
       <div className="relative z-10">
         <header className="px-8 py-6">

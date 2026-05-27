@@ -12,15 +12,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-<<<<<<< HEAD
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-[#06080f]" suppressHydrationWarning>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden
+          className="fixed inset-0 w-full h-full object-cover -z-10"
+        >
+          <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260422_191657_800d4e1f-7ab3-41af-90b6-9bd3039eb294.mp4" type="video/mp4" />
+        </video>
         {children}
       </body>
-=======
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col bg-background">{children}</body>
->>>>>>> efed10a42a1ed5fff1f4e36b9239afeeed821748
     </html>
   );
 }
