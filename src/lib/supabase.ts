@@ -14,9 +14,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
   supabase = {
     auth: {
-      getSession: async () => ({ data: null }),
+      getSession: async () => ({ data: { session: null } }),
       onAuthStateChange: (_: any) => ({ data: { subscription: { unsubscribe: () => {} } } }),
-      signUp: async () => ({ data: null, error: null }),
+      signUp: async () => ({ data: { user: null }, error: null }),
       signInWithPassword: async () => ({ data: { user: null }, error: null }),
       signOut: async () => ({ error: null }),
     },
