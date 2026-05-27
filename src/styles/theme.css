@@ -20,3 +20,9 @@
 .animate-fade-rise-delay-2 {
   animation: fade-rise 0.8s ease-out 0.4s both;
 }
+
+.hero-headline-metrics {
+  line-height: 0.95;
+  letter-spacing: var(--hero-letter-spacing);
+  max-width: 80rem;
+}
