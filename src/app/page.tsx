@@ -1,19 +1,76 @@
-const sidebarItems = ["Dashboard", "Today", "Upcoming", "Categories", "Analytics", "Settings"];
-const focusTasks = [
+"use client";
+
+import { useState, type FormEvent } from "react";
+
+const sidebarItems = [
+  { label: "Dashboard", badge: "→" },
+  { label: "Today", badge: "0" },
+  { label: "Upcoming", badge: "→" },
+  { label: "Categories", badge: "→" },
+  { label: "Analytics", badge: "→" },
+  { label: "Settings", badge: "→" },
+] as const;
+type TaskStatus = "In Progress" | "Pending" | "Review" | "Done";
+
+type Task = {
+  title: string;
+  category: string;
+  due: string;
+  status: TaskStatus;
+};
+
+const defaultTasks: Task[] = [
   { title: "Design review for mobile onboarding", category: "Design", due: "10:30 AM", status: "In Progress" },
   { title: "Finalize Q2 growth experiment brief", category: "Strategy", due: "12:15 PM", status: "Pending" },
   { title: "Refactor task reminder microcopy", category: "Product", due: "3:00 PM", status: "Review" },
   { title: "Prepare sprint retro insights deck", category: "Team Ops", due: "5:30 PM", status: "Done" },
 ];
 
-const statusClasses: Record<string, string> = {
+const priorityToStatus = {
+  high: "In Progress",
+  medium: "Pending",
+  low: "Review",
+} as const;
+
+const statusClasses: Record<TaskStatus, string> = {
   "In Progress": "bg-cyan-400/20 text-cyan-200 border-cyan-300/30",
   Pending: "bg-amber-400/20 text-amber-200 border-amber-300/30",
   Review: "bg-violet-400/20 text-violet-200 border-violet-300/30",
   Done: "bg-emerald-400/20 text-emerald-200 border-emerald-300/30",
 };
 
+const formatCategoryName = (value: string) =>
+  value
+    .split("-")
+    .map((segment) => segment[0].toUpperCase() + segment.slice(1))
+    .join(" ");
+
 export default function Home() {
+  const [activeNavItem, setActiveNavItem] = useState("Dashboard");
+  const [tasks, setTasks] = useState<Task[]>(defaultTasks);
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("product-design");
+  const [selectedPriority, setSelectedPriority] = useState<keyof typeof priorityToStatus>("high");
+
+  const completedTasksCount = tasks.filter((task) => task.status === "Done").length;
+  const createdTasksCount = tasks.length - defaultTasks.length;
+
+  const handleCreateTask = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!title.trim()) return;
+
+    setTasks((previous) => [
+      {
+        title: title.trim(),
+        category: formatCategoryName(category),
+        due: "Tomorrow",
+        status: priorityToStatus[selectedPriority],
+      },
+      ...previous,
+    ]);
+    setTitle("");
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden px-4 py-5 sm:px-8 sm:py-8">
       <div className="pointer-events-none absolute -left-32 top-8 h-72 w-72 rounded-full bg-fuchsia-500/25 blur-3xl" />
@@ -33,16 +90,17 @@ export default function Home() {
           <nav className="space-y-2">
             {sidebarItems.map((item) => (
               <button
-                key={item}
+                key={item.label}
                 type="button"
+                onClick={() => setActiveNavItem(item.label)}
                 className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left text-sm transition ${
-                  item === "Dashboard"
+                  item.label === activeNavItem
                     ? "border-cyan-300/40 bg-cyan-400/15 text-cyan-100"
                     : "border-transparent bg-white/5 text-slate-300 hover:border-white/10 hover:bg-white/10"
                 }`}
               >
-                <span>{item}</span>
-                <span className="text-xs text-slate-400">{item === "Today" ? "8" : "→"}</span>
+                <span>{item.label}</span>
+                <span className="text-xs text-slate-400">{item.label === "Today" ? tasks.length : item.badge}</span>
               </button>
             ))}
           </nav>
@@ -65,7 +123,7 @@ export default function Home() {
             <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
               <div className="h-10 w-10 rounded-full bg-gradient-to-br from-sky-300 to-violet-400" />
               <div>
-                <p className="text-sm font-medium text-slate-100">Rishith</p>
+                <p className="text-sm font-medium text-slate-100">Focus Pilot</p>
                 <p className="text-xs text-slate-400">Level 12 Explorer</p>
               </div>
             </div>
@@ -74,13 +132,16 @@ export default function Home() {
           <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <article className="rounded-2xl border border-white/10 bg-white/5 p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Today&apos;s Tasks</p>
-              <p className="mt-3 text-3xl font-semibold text-white">12</p>
-              <p className="mt-1 text-xs text-emerald-300">+3 from yesterday</p>
+              <p className="mt-3 text-3xl font-semibold text-white">{tasks.length}</p>
+              <p className="mt-1 text-xs text-emerald-300">
+                {createdTasksCount >= 0 ? "+" : ""}
+                {createdTasksCount} created today
+              </p>
             </article>
             <article className="rounded-2xl border border-white/10 bg-white/5 p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Completed</p>
               <p className="mt-3 text-3xl font-semibold text-white">67%</p>
-              <p className="mt-1 text-xs text-cyan-300">8 tasks done</p>
+              <p className="mt-1 text-xs text-cyan-300">{completedTasksCount} tasks done</p>
             </article>
             <article className="rounded-2xl border border-white/10 bg-white/5 p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Streak</p>
@@ -98,12 +159,15 @@ export default function Home() {
             <section className="rounded-3xl border border-white/10 bg-black/25 p-5">
               <div className="mb-5 flex items-center justify-between">
                 <h3 className="text-xl font-semibold text-white">Today&apos;s Missions</h3>
-                <button className="rounded-lg border border-cyan-300/40 bg-cyan-400/10 px-3 py-1.5 text-xs font-medium text-cyan-100">
+                <button
+                  className="rounded-lg border border-cyan-300/40 bg-cyan-400/10 px-3 py-1.5 text-xs font-medium text-cyan-100"
+                  aria-label="Add new task to today's missions"
+                >
                   + Add Task
                 </button>
               </div>
               <div className="space-y-3">
-                {focusTasks.map((task) => (
+                {tasks.map((task) => (
                   <article key={task.title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                       <div>
@@ -122,14 +186,53 @@ export default function Home() {
             <section className="space-y-4">
               <article className="rounded-3xl border border-white/10 bg-black/25 p-5">
                 <h3 className="text-lg font-semibold text-white">Create Task</h3>
-                <div className="mt-4 space-y-3 text-sm">
-                  <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-slate-300">Title: Ship onboarding prototype</div>
-                  <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-slate-300">Category: Product Design</div>
-                  <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-slate-300">Priority: High</div>
-                  <button className="w-full rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 px-4 py-2.5 font-medium text-slate-950">
+                <form className="mt-4 space-y-3 text-sm" onSubmit={handleCreateTask}>
+                  <label className="block" htmlFor="task-title">
+                    <span className="mb-1 block text-xs text-slate-400">Title</span>
+                    <input
+                      id="task-title"
+                      type="text"
+                      value={title}
+                      placeholder="Ship onboarding prototype"
+                      onChange={(event) => setTitle(event.target.value)}
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-slate-100 outline-none transition focus:border-cyan-300/50 focus:bg-white/10"
+                    />
+                  </label>
+                  <label className="block" htmlFor="task-category">
+                    <span className="mb-1 block text-xs text-slate-400">Category</span>
+                    <select
+                      id="task-category"
+                      value={category}
+                      onChange={(event) => setCategory(event.target.value)}
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-slate-100 outline-none transition focus:border-cyan-300/50 focus:bg-white/10"
+                    >
+                      <option value="product-design">Product Design</option>
+                      <option value="engineering">Engineering</option>
+                      <option value="marketing">Marketing</option>
+                      <option value="operations">Operations</option>
+                    </select>
+                  </label>
+                  <label className="block" htmlFor="task-priority">
+                    <span className="mb-1 block text-xs text-slate-400">Priority</span>
+                    <select
+                      id="task-priority"
+                      value={selectedPriority}
+                      onChange={(event) => setSelectedPriority(event.target.value as keyof typeof priorityToStatus)}
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-slate-100 outline-none transition focus:border-cyan-300/50 focus:bg-white/10"
+                    >
+                      <option value="high">High</option>
+                      <option value="medium">Medium</option>
+                      <option value="low">Low</option>
+                    </select>
+                  </label>
+                  <button
+                    type="submit"
+                    aria-label="Save new task"
+                    className="w-full rounded-xl bg-gradient-to-r from-cyan-400 to-violet-500 px-4 py-2.5 font-medium text-slate-950"
+                  >
                     Save Mission
                   </button>
-                </div>
+                </form>
               </article>
 
               <article className="rounded-3xl border border-white/10 bg-black/25 p-5">
