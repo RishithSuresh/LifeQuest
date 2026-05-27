@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Profile, Task, Category, Priority } from '@/types';
+import type { Profile, Task } from '@/types';
 
 // Auth Store
 interface AuthState {

@@ -1,16 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { TaskOverview } from '@/components/dashboard/TaskOverview';
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
 import { QuickAddTask } from '@/components/dashboard/QuickAddTask';
-import { Card } from '@/components/common/Card';
-import { useAuthStore, useUserStore } from '@/store';
+import { useAuthStore } from '@/store';
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
-  const { stats } = useUserStore();
 
   if (!user) {
     return (

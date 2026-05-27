@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { useTaskStore } from '@/store';
 import { Badge } from '@/components/common/Badge';
 import { Card } from '@/components/common/Card';
 import type { Task } from '@/types';

@@ -1,29 +1,34 @@
 'use client';
 
 import React from 'react';
-import { useTaskStore } from '@/store';
-import { Card } from '@/components/common/Card';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
+import type { TaskFormData } from '@/types';
 
 interface TaskFormProps {
-  onSubmit: (taskData: any) => Promise<void>;
+  onSubmit: (taskData: TaskFormData) => Promise<void>;
   isLoading?: boolean;
-  initialData?: any;
+  initialData?: Partial<TaskFormData>;
 }
 
 export const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, isLoading = false, initialData }) => {
-  const [formData, setFormData] = React.useState(initialData || {
-    title: '',
-    description: '',
-    priority_id: 'medium',
-    xp_reward: 10,
-    due_date: '',
+  const [formData, setFormData] = React.useState<TaskFormData>({
+    title: initialData?.title ?? '',
+    description: initialData?.description ?? '',
+    priority_id: initialData?.priority_id ?? 'medium',
+    xp_reward: initialData?.xp_reward ?? 10,
+    due_date: initialData?.due_date ?? '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev: any) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === 'xp_reward' ? Number(value) : value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

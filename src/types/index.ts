@@ -55,6 +55,14 @@ export interface Task {
   updated_at: string;
 }
 
+export interface TaskFormData {
+  title: string;
+  description: string;
+  priority_id: string;
+  xp_reward: number;
+  due_date: string;
+}
+
 export interface TaskTag {
   id: string;
   user_id: string;
@@ -77,7 +85,7 @@ export interface ActivityLog {
   user_id: string;
   action: string;
   description: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 

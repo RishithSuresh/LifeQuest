@@ -1,11 +1,10 @@
 'use client';
 
-import { useAuthStore, useUserStore } from '@/store';
+import { useAuthStore } from '@/store';
 import { Card } from '@/components/common/Card';
 
 export const Navbar: React.FC = () => {
   const { user } = useAuthStore();
-  const { profile } = useUserStore();
 
   return (
     <nav className="bg-slate-950/50 border-b border-slate-800 backdrop-blur-sm sticky top-0 z-30">

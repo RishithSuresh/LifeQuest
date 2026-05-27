@@ -1,13 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { TaskList } from '@/components/tasks/TaskList';
 import { TaskForm } from '@/components/tasks/TaskForm';
 import { Modal } from '@/components/common/Modal';
 import { useTaskStore } from '@/store';
-import type { Task } from '@/types';
+import type { Task, TaskFormData } from '@/types';
 
 export default function TasksPage() {
   const { filteredTasks, addTask, updateTask, deleteTask } = useTaskStore();
@@ -15,7 +14,7 @@ export default function TasksPage() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (taskData: any) => {
+  const handleSubmit = async (taskData: TaskFormData) => {
     setIsLoading(true);
     try {
       const newTask: Task = {

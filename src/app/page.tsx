@@ -1,22 +1,15 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
+import DashboardPage from '@/app/(app)/page';
 
 export default function Home() {
-  const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      router.push('/');
-    }
-  }, [isAuthenticated, isLoading, router]);
-
+  // If still loading auth state, show loading UI
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -29,7 +22,8 @@ export default function Home() {
   }
 
   if (isAuthenticated) {
-    return null;
+    // Render the dashboard when authenticated so the user sees the app
+    return <DashboardPage />;
   }
 
   return (

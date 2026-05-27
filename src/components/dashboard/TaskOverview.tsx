@@ -2,10 +2,9 @@
 
 import React from 'react';
 import { Card } from '@/components/common/Card';
-import { useAuthStore, useCharacterStore } from '@/store';
+import { useCharacterStore } from '@/store';
 
 export const TaskOverview: React.FC = () => {
-  const { user } = useAuthStore();
   const { level, xp, getProgressToNextLevel, nextLevelXp } = useCharacterStore();
 
   return (

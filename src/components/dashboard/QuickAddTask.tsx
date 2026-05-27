@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import { Card } from '@/components/common/Card';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
+import type { TaskFormData } from '@/types';
 
 interface QuickAddTaskProps {
-  onAddTask: (taskData: any) => Promise<void>;
+  onAddTask: (taskData: TaskFormData) => Promise<void>;
 }
 
 export const QuickAddTask: React.FC<QuickAddTaskProps> = ({ onAddTask }) => {
@@ -23,8 +24,8 @@ export const QuickAddTask: React.FC<QuickAddTaskProps> = ({ onAddTask }) => {
         title,
         description: '',
         priority_id: 'medium',
-        status_id: 'todo',
         xp_reward: 10,
+        due_date: '',
       });
       setTitle('');
     } finally {

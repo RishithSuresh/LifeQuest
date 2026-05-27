@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Card } from '@/components/common/Card';
-import type { Profile } from '@/types';
 
 interface StatCardProps {
   icon: string;

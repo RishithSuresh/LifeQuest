@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { useAuthStore, useUserStore } from '@/store';
 import type { Profile } from '@/types';
@@ -9,6 +10,27 @@ export const useAuth = () => {
   const { user, isAuthenticated, isLoading, setUser, setIsAuthenticated, setIsLoading } =
     useAuthStore();
   const { setProfile } = useUserStore();
+
+  const loadUserProfile = useCallback(
+    async (userId: string) => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        if (error) throw error;
+        if (data) {
+          setUser(data as Profile);
+          setProfile(data as Profile);
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      }
+    },
+    [setProfile, setUser],
+  );
 
   // Initialize auth session
   useEffect(() => {
@@ -31,7 +53,7 @@ export const useAuth = () => {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
       if (session?.user) {
         await loadUserProfile(session.user.id);
         setIsAuthenticated(true);
@@ -43,54 +65,21 @@ export const useAuth = () => {
     });
 
     return () => subscription?.unsubscribe();
-  }, [setUser, setIsAuthenticated, setIsLoading, setProfile]);
+  }, [loadUserProfile, setUser, setIsAuthenticated, setIsLoading, setProfile]);
 
-  const loadUserProfile = async (userId: string) => {
+  const signUp = async (email: string, password: string, _username: string) => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (error) throw error;
-      if (data) {
-        setUser(data as Profile);
-        setProfile(data as Profile);
-      }
-    } catch (error) {
-      console.error('Error loading profile:', error);
-    }
-  };
-
-  const signUp = async (email: string, password: string, username: string) => {
-    try {
+      void _username;
       setIsLoading(true);
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
       });
 
       if (error) throw error;
 
-      // Create profile
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([
-            {
-              id: data.user.id,
-              email,
-              username,
-              xp: 0,
-              level: 1,
-              streak_count: 0,
-              total_tasks_completed: 0,
-            },
-          ] as any);
-
-        if (profileError) throw profileError;
-      }
+      // The database trigger in Supabase creates the profile row on signup.
+      // We only need to continue if auth signup itself succeeded.
 
       setIsAuthenticated(true);
       return { success: true };

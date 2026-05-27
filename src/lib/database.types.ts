@@ -198,7 +198,7 @@ export type Database = {
           user_id: string;
           action: string;
           description: string;
-          metadata?: Record<string, any>;
+          metadata?: Record<string, unknown>;
           created_at: string;
         };
         Insert: {
@@ -206,7 +206,7 @@ export type Database = {
           user_id: string;
           action: string;
           description: string;
-          metadata?: Record<string, any>;
+          metadata?: Record<string, unknown>;
           created_at?: string;
         };
         Update: never;

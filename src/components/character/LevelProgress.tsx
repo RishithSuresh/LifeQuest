@@ -5,7 +5,7 @@ import { Card } from '@/components/common/Card';
 import { useCharacterStore } from '@/store';
 
 export const LevelProgress: React.FC = () => {
-  const { level, xp, getProgressToNextLevel, nextLevelXp, addXp } = useCharacterStore();
+  const { level, xp, getProgressToNextLevel, nextLevelXp } = useCharacterStore();
 
   return (
     <Card>
