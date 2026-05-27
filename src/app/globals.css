@@ -1,14 +1,20 @@
+@import "../styles/fonts.css";
 @import "tailwindcss";
+@import "../styles/theme.css";
 
 :root {
-  --background: #06080f;
-  --foreground: #edf3ff;
+  --background: #ffffff;
+  --foreground: #000000;
+  --muted: #6f6f6f;
+  --hero-letter-spacing: -2.46px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
   --font-sans: "Inter", "SF Pro Display", "Segoe UI", sans-serif;
+  --font-display: "Instrument Serif", "Times New Roman", serif;
 }
 
 * {
@@ -21,41 +27,4 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-}
-
-.glass-panel {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1.8rem;
-  background: linear-gradient(145deg, rgba(20, 24, 36, 0.72), rgba(9, 12, 20, 0.58));
-  box-shadow: 0 24px 80px rgba(2, 8, 21, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(26px);
-}
-
-.ambient-grid {
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 70px 70px;
-  mask-image: radial-gradient(circle at 50% 45%, black 42%, transparent 90%);
-}
-
-.noise-layer {
-  opacity: 0.16;
-  background-image: radial-gradient(circle at 20% 20%, rgba(130, 192, 255, 0.2) 0, transparent 20%),
-    radial-gradient(circle at 80% 10%, rgba(188, 131, 255, 0.2) 0, transparent 24%),
-    radial-gradient(circle at 55% 80%, rgba(255, 188, 124, 0.15) 0, transparent 22%);
-  animation: drift 15s linear infinite;
-}
-
-@keyframes drift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(-2%, -1%, 0) scale(1.05);
-  }
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
 }
