@@ -5,7 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #000000;
-  --muted: #6f6f6f;
+  --muted: #ffffff;
   --hero-letter-spacing: -2.46px;
 }
 
@@ -27,4 +27,17 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+/* Hero text pop styles: bright text with subtle shadow so it reads over video backgrounds */
+.hero-pop {
+  color: #ffffff;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(255, 255, 255, 0.02);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.hero-subtext-pop {
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
 }
