@@ -3,10 +3,9 @@
 @import "../styles/theme.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
-  --muted: #ffffff;
-  --hero-letter-spacing: -2.46px;
+  --background: #070a16;
+  --foreground: #f8fbff;
+  --muted: #94a3b8;
 }
 
 @theme inline {
@@ -24,20 +23,15 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--background);
+  background: radial-gradient(circle at 12% 20%, #1a1f4d 0%, transparent 42%),
+    radial-gradient(circle at 85% 5%, #173566 0%, transparent 35%),
+    linear-gradient(145deg, #05070f 0%, #0d1224 45%, #070a16 100%);
   color: var(--foreground);
   font-family: var(--font-sans);
 }
 
-/* Hero text pop styles: bright text with subtle shadow so it reads over video backgrounds */
-.hero-pop {
-  color: #ffffff;
-  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(255, 255, 255, 0.02);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.hero-subtext-pop {
-  color: rgba(255, 255, 255, 0.88);
-  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+.glass-panel {
+  background: linear-gradient(140deg, rgba(11, 19, 39, 0.92), rgba(7, 12, 26, 0.82));
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
 }
